@@ -1,9 +1,8 @@
 
 var quoteMaker = {
 	quote: "There surely is in human nature an inherent propensity to extract all the good out of all the evil.",
-	attribute: " Benjamin Haydon",
-	color: "",
-	raw: ""
+	attrib: " Benjamin Haydon",
+	color: ""
 	
 	
 }
@@ -15,9 +14,12 @@ var quoteGrab = function(){
 	
 	    $.getJSON("http://api.forismatic.com/api/1.0/?method=getQuote&key=457653&format=json&lang=en", 
 		function(json) {
-			$(".quote").html(JSON.stringify(json["quoteText"]))
+			quoteMaker.quote=(json["quoteText"]);
+			$(".quote").html(quoteMaker.quote);	
+			quoteMaker.attrib=(json["quoteAuthor"]);
+			$(".attrib").html(quoteMaker.attrib)
 			
-			$(".attrib").html(JSON.stringify(json["quoteAuthor"]))
+			tweetReady();
 			}
 		)
 	};
@@ -59,9 +61,16 @@ var buttonPress = function(){
 		colorPicker();
 		newQuote();
 		
+		
 	})
 	
 	
+	
+}
+
+var tweetReady = function(){
+	
+	$(".twitter-share-button").attr("href", "https://twitter.com/intent/tweet?text="+quoteMaker.quote+" - "+quoteMaker.attrib)
 	
 }
 
@@ -83,11 +92,14 @@ var colorPicker= function(){
 	quoteMaker.color = color;
 };
 
+
+
 var main = function(){
 	
 	
 	buttonPress();
 	quoteGrab();
+	tweetReady();
 }
 
 $(document).ready(main)
